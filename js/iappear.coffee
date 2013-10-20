@@ -2,7 +2,7 @@
 # Name    : iappear for iScroll
 # Author  : Norris, justnorris.com, @justnorris
 # Version : 1.0.0
-# Repo    : <repo url>
+# Repo    : https://github.com/justnorris/iappear.js
 # Website : http://justnorris.com/iappear-for-iscroll
 #
 
@@ -131,14 +131,5 @@ jQuery ->
 			if $( this ).data( 'iappear' ) is undefined
 				plugin = new $.iappear( this, iScroll,  options )
 				$( this ).data( 'iappear', plugin )
-
-	# this.get_instance = ->
-	#     return $(this).data( "iappear" )
-
-	# return this
-
-
-
-
 
 

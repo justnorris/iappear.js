@@ -1,25 +1,25 @@
 {
-  "name"            : "miniboilerplate",
-  "title"           : "MiniBoilerplate",
-  "version"         : "1.2.0",
-  "homepage"        : "http://miniboilerplate.com",
+  "name"            : "iappear",
+  "title"           : "iappear for IScroll 5",
+  "version"         : "1.0.0",
+  "homepage"        : "http://justnorris.com",
   "author"          : {
-    "name"  : "Matthieu Aussaguel",
-    "email" : "matthieu.aussaguel@gmail.com",
-    "url"   : "http://mynameismatthieu.com"
+    "name"  : "Norris",
+    "email" : "im@justnorris.com",
+    "url"   : "http://justnorris.com"
   },
   "repository" : {
     "type" : "git",
-    "url"  : "git://github.com/miniJs/miniBoilerplate.git"
+    "url"  : "git://github.com/justnorris/iappear.js.git"
   },
-  "description" : "Looking to create a jQuery plugin in CoffeeScript using Test-driven development? If so, MiniBoilerplate is what you've been looking for.",
-  "keywords": ["development", "workflow", "rapid", "test", "jasmine", "jquery", "plugin", "headless", "javascript", "coffeescript", "guard", "boilerplate", "default", "toolkit", "base"],
+  "description" : "Track elements that appear and disappear with IScroll 5",
+  "keywords": ["iscroll", "iscroll5", "appear", "iappear"],
   "bugs" : {
-    "url" : "https://github.com/miniJs/miniBoilerplate/issues"
+    "url" : "https://github.com/justnorris/iappear.js/issues"
   },
   "licenses": [{
     "type": "MIT",
-    "url" : "http://matthieuaussaguel.mit-license.org/"
+    "url" : "http://norris.mit-license.org/"
   }],
   "devDependencies" : {
     "grunt"                : "0.4.1",

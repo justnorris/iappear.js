@@ -241,9 +241,6 @@ describe 'iAppear', ->
 			expect( @num ).toBe( -20 )
 
 
-		# it "should call back a function when an element disappears", ->
-
-
 
 
 
