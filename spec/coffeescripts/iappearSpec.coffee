@@ -67,7 +67,7 @@ describe 'iAppear', ->
 
 
 
-	describe 'plugin behavior', -> 
+	describe 'plugin basic behavior', -> 
 		
 		beforeEach ->
 			@ia = new $.iappear( @$el, @iScroll )
@@ -129,9 +129,117 @@ describe 'iAppear', ->
 			expect( @ia.is_visible() ).toBe true
 
 
-		# it "should call back a function when an element appears", ->
 
-		# it "should call back a function only once, if specified", ->
+
+	describe 'plugin callback behavior', ->
+		beforeEach ->
+			@num = 0
+			self = @
+			
+			@ia = new $.iappear @$el, @iScroll, 
+				on_appear: ->
+					# console.info "Adding 10 to #{self.num}\nTotal: #{self.num + 10}"
+					self.num = self.num + 10
+
+				on_disappear: ->
+					# console.info "Removing 10 from #{self.num}\nTotal: #{self.num - 20}"
+					self.num = self.num - 20			
+
+
+		it "should trigger on_appear when an item appears", ->
+			@iScroll.scrollTo(0, @ia.location )
+			@ia.update_position()
+
+			expect( @num ).toBe( 10 )
+
+		it "shouldn't trigger on_appear again if the element is still visible", ->
+			@iScroll.scrollTo(0, @ia.location )
+			
+			@ia.update_position()
+			@ia.update_position()
+
+			expect( @num ).toBe( 10 )
+
+		it "shouldn't trigger on_disappear if an element never has been visible", ->
+			@iScroll.scrollTo(0, 10000 )
+			@ia.update_position()
+			
+			expect( @num ).toBe( 0 )
+
+		it 'should trigger on_disappear if an element was visible', ->
+		  
+			@iScroll.scrollTo(0, @ia.location )
+			@ia.update_position()
+
+			@iScroll.scrollTo(0, 10000 )
+			@ia.update_position()
+			
+			expect( @num ).toBe( -10 )
+
+		it 'should not trigger on_disappear twice in a row', ->
+
+			@iScroll.scrollTo(0, @ia.location )
+			@ia.update_position()
+
+			expect( @num ).toBe( 10 )
+
+			@iScroll.scrollTo(0, 10000 )
+			@ia.update_position()
+
+			expect( @num ).toBe( -10 )
+			
+			@iScroll.scrollTo(0, 5000 )
+			@ia.update_position()
+
+			expect( @num ).toBe( -10 )
+
+		it "should obey 'once' parameter (when true) ", ->
+			@ia.opts.once = true
+
+			@iScroll.scrollTo(0, @ia.location )
+			@ia.update_position()
+
+			expect( @num ).toBe( 10 )
+
+			@iScroll.scrollTo(0, 10000 )
+			@ia.update_position()
+
+			expect( @num ).toBe( -10 )
+			
+			@iScroll.scrollTo(0, @ia.location )
+			@ia.update_position()
+
+			expect( @num ).toBe( -10 )
+
+			@iScroll.scrollTo(0, 10000 )
+			@ia.update_position()
+			
+			expect( @num ).toBe( -10 )
+
+
+		it "should obey 'once' parameter (when false) ", ->
+			@ia.opts.once = false
+
+			@iScroll.scrollTo(0, @ia.location )
+			@ia.update_position()
+
+			expect( @num ).toBe( 10 )
+
+			@iScroll.scrollTo(0, 10000 )
+			@ia.update_position()
+
+			expect( @num ).toBe( -10 )
+			
+			@iScroll.scrollTo(0, @ia.location )
+			@ia.update_position()
+
+			expect( @num ).toBe( 0 )
+
+			@iScroll.scrollTo(0, 10000 )
+			@ia.update_position()
+			
+			expect( @num ).toBe( -20 )
+
 
 		# it "should call back a function when an element disappears", ->
 

@@ -13,6 +13,9 @@
       this.location = -1;
       this.position = -1;
       self = this;
+      this.status = false;
+      this.appeared = false;
+      this.disappeared = false;
       this.get_conv_axis = function() {
         if (this.opts.axis === "y") {
           return "top";
@@ -42,6 +45,7 @@
         var pos;
         pos = iScroll.getComputedPosition()[this.opts.axis];
         this.position = pos + this.opts.offset;
+        this.maybe_update_visibility();
         return this.position;
       };
       this.is_visible = function() {
@@ -58,7 +62,42 @@
         var axis, pos;
         axis = self.opts.axis;
         pos = this[axis] >> 0;
-        return self.position = pos;
+        self.position = pos;
+        self.maybe_update_visibility();
+        return pos;
+      };
+      this.maybe_update_visibility = function() {
+        var visible;
+        visible = this.is_visible();
+        if (this.status !== visible) {
+          this.update_status(visible);
+        }
+        return visible;
+      };
+      this.update_status = function(status) {
+        if (status == null) {
+          status = false;
+        }
+        if (this.status === status) {
+          throw new Error("Status was already " + status);
+          return;
+        }
+        this.status = status;
+        if (status === true) {
+          if (this.appeared === false) {
+            if (this.opts.once === true) {
+              this.appeared = true;
+            }
+            return this.opts.on_appear();
+          }
+        } else {
+          if (this.disappeared === false) {
+            if (this.opts.once === true) {
+              this.disappeared = true;
+            }
+            return this.opts.on_disappear();
+          }
+        }
       };
       this.init = function() {
         this.opts = $.extend({}, this.defaults, options);

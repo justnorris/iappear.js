@@ -63,7 +63,7 @@
         return expect(before).not.toMatch(after);
       });
     });
-    return describe('plugin behavior', function() {
+    describe('plugin basic behavior', function() {
       beforeEach(function() {
         return this.ia = new $.iappear(this.$el, this.iScroll);
       });
@@ -114,6 +114,85 @@
         this.iScroll.scrollTo(0, this.ia.location);
         this.ia.update_position();
         return expect(this.ia.is_visible()).toBe(true);
+      });
+    });
+    return describe('plugin callback behavior', function() {
+      beforeEach(function() {
+        var self;
+        this.num = 0;
+        self = this;
+        return this.ia = new $.iappear(this.$el, this.iScroll, {
+          on_appear: function() {
+            return self.num = self.num + 10;
+          },
+          on_disappear: function() {
+            return self.num = self.num - 20;
+          }
+        });
+      });
+      it("should trigger on_appear when an item appears", function() {
+        this.iScroll.scrollTo(0, this.ia.location);
+        this.ia.update_position();
+        return expect(this.num).toBe(10);
+      });
+      it("shouldn't trigger on_appear again if the element is still visible", function() {
+        this.iScroll.scrollTo(0, this.ia.location);
+        this.ia.update_position();
+        this.ia.update_position();
+        return expect(this.num).toBe(10);
+      });
+      it("shouldn't trigger on_disappear if an element never has been visible", function() {
+        this.iScroll.scrollTo(0, 10000);
+        this.ia.update_position();
+        return expect(this.num).toBe(0);
+      });
+      it('should trigger on_disappear if an element was visible', function() {
+        this.iScroll.scrollTo(0, this.ia.location);
+        this.ia.update_position();
+        this.iScroll.scrollTo(0, 10000);
+        this.ia.update_position();
+        return expect(this.num).toBe(-10);
+      });
+      it('should not trigger on_disappear twice in a row', function() {
+        this.iScroll.scrollTo(0, this.ia.location);
+        this.ia.update_position();
+        expect(this.num).toBe(10);
+        this.iScroll.scrollTo(0, 10000);
+        this.ia.update_position();
+        expect(this.num).toBe(-10);
+        this.iScroll.scrollTo(0, 5000);
+        this.ia.update_position();
+        return expect(this.num).toBe(-10);
+      });
+      it("should obey 'once' parameter (when true) ", function() {
+        this.ia.opts.once = true;
+        this.iScroll.scrollTo(0, this.ia.location);
+        this.ia.update_position();
+        expect(this.num).toBe(10);
+        this.iScroll.scrollTo(0, 10000);
+        this.ia.update_position();
+        expect(this.num).toBe(-10);
+        this.iScroll.scrollTo(0, this.ia.location);
+        this.ia.update_position();
+        expect(this.num).toBe(-10);
+        this.iScroll.scrollTo(0, 10000);
+        this.ia.update_position();
+        return expect(this.num).toBe(-10);
+      });
+      return it("should obey 'once' parameter (when false) ", function() {
+        this.ia.opts.once = false;
+        this.iScroll.scrollTo(0, this.ia.location);
+        this.ia.update_position();
+        expect(this.num).toBe(10);
+        this.iScroll.scrollTo(0, 10000);
+        this.ia.update_position();
+        expect(this.num).toBe(-10);
+        this.iScroll.scrollTo(0, this.ia.location);
+        this.ia.update_position();
+        expect(this.num).toBe(0);
+        this.iScroll.scrollTo(0, 10000);
+        this.ia.update_position();
+        return expect(this.num).toBe(-20);
       });
     });
   });

@@ -27,6 +27,11 @@ jQuery ->
 
 		self = this
 
+		@status = false
+		@appeared = false
+		@disappeared = false
+
+
 		@get_conv_axis = ->
 			if @opts.axis is "y" then "top" else "left"
 	
@@ -48,7 +53,9 @@ jQuery ->
 			pos = iScroll.getComputedPosition()[@opts.axis]
 
 			@position = pos + @opts.offset
-			@position
+			@maybe_update_visibility()
+
+			return @position
 
 
 		@is_visible = ->
@@ -65,6 +72,30 @@ jQuery ->
 			pos = this[axis] >> 0
 
 			self.position = pos
+			self.maybe_update_visibility()
+			return pos
+
+		@maybe_update_visibility = ->
+			visible = @is_visible()
+			@update_status( visible ) if @status isnt visible
+			return visible
+
+		@update_status = ( status = false ) ->
+			if @status is status
+				throw new Error "Status was already #{status}"
+				return
+
+			@status = status
+
+			if status is true
+				if @appeared is false 
+					@appeared = true if @opts.once is true
+					@opts.on_appear() 
+			else
+				if @disappeared is false 
+					@disappeared = true if @opts.once is true
+					@opts.on_disappear()
+
 
 
 		@init = ->
