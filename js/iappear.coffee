@@ -76,6 +76,8 @@ jQuery ->
 			return pos
 
 		@maybe_update_visibility = ->
+			return if @appeared is true and @disappeared is true and @opts.once is true
+
 			visible = @is_visible()
 			@update_status( visible ) if @status isnt visible
 			return visible
@@ -88,13 +90,11 @@ jQuery ->
 			@status = status
 
 			if status is true
-				if @appeared is false 
-					@appeared = true if @opts.once is true
-					@opts.on_appear() 
+				@appeared = true if @opts.once is true
+				@opts.on_appear() 
 			else
-				if @disappeared is false 
-					@disappeared = true if @opts.once is true
-					@opts.on_disappear()
+				@disappeared = true if @opts.once is true
+				@opts.on_disappear()
 
 
 

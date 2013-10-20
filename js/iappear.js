@@ -68,6 +68,9 @@
       };
       this.maybe_update_visibility = function() {
         var visible;
+        if (this.appeared === true && this.disappeared === true && this.opts.once === true) {
+          return;
+        }
         visible = this.is_visible();
         if (this.status !== visible) {
           this.update_status(visible);
@@ -84,19 +87,15 @@
         }
         this.status = status;
         if (status === true) {
-          if (this.appeared === false) {
-            if (this.opts.once === true) {
-              this.appeared = true;
-            }
-            return this.opts.on_appear();
+          if (this.opts.once === true) {
+            this.appeared = true;
           }
+          return this.opts.on_appear();
         } else {
-          if (this.disappeared === false) {
-            if (this.opts.once === true) {
-              this.disappeared = true;
-            }
-            return this.opts.on_disappear();
+          if (this.opts.once === true) {
+            this.disappeared = true;
           }
+          return this.opts.on_disappear();
         }
       };
       this.init = function() {
