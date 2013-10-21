@@ -68,7 +68,11 @@
         return this.ia = new $.iappear(this.$el, this.iScroll);
       });
       it('should know where the $element is', function() {
-        return expect(this.ia.location).toBeDefined();
+        return expect(this.ia.target).toBeDefined();
+      });
+      it('should not be 0 px high or wide', function() {
+        expect(this.ia.target).toBeDefined();
+        return expect(this.ia.target.top).not.toBe(this.ia.target.bottom);
       });
       it('should have a position', function() {
         return expect(this.ia.position).toBeDefined();

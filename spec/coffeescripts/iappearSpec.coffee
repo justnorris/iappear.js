@@ -73,8 +73,12 @@ describe 'iAppear', ->
 			@ia = new $.iappear( @$el, @iScroll )
 
 		it 'should know where the $element is', ->
-			expect( @ia.location ).toBeDefined()
-		
+			expect( @ia.target ).toBeDefined()
+	
+		it 'should not be 0 px high or wide', ->
+			expect( @ia.target ).toBeDefined()
+			expect( @ia.target.top ).not.toBe( @ia.target.bottom )
+
 		it 'should have a position', ->
 			expect( @ia.position ).toBeDefined()
 

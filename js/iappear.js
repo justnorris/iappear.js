@@ -10,7 +10,10 @@
       this.$element = $(element);
       this.element = this.$element.get(0);
       this.$window = $(window);
-      this.location = -1;
+      this.target = {
+        top: -1,
+        bottom: -1
+      };
       this.position = -1;
       self = this;
       this.status = false;
@@ -24,10 +27,13 @@
         }
       };
       this.update_location = function() {
-        var axis, loc;
+        var axis, target;
         axis = this.get_conv_axis();
-        loc = this.$element.position();
-        return this.location = loc[axis];
+        target = this.$element.position();
+        return this.target = {
+          top: target[axis],
+          bottom: target[axis] + this.dimensions.element[this.opts.axis]
+        };
       };
       this.gather_dimensions = function() {
         return this.dimensions = {
@@ -49,19 +55,14 @@
         return this.position;
       };
       this.is_visible = function() {
-        var bottom, box, port, top, viewport;
+        var bottom, port, top, viewport;
         viewport = this.dimensions.window[this.opts.axis];
-        element = this.dimensions.element[this.opts.axis];
-        box = {
-          top: this.location,
-          bottom: this.location + element
-        };
         port = {
           top: this.position - viewport,
           bottom: this.position
         };
-        top = box.top + port.top + this.opts.offset;
-        bottom = box.bottom + port.bottom + this.opts.offset;
+        top = this.target.top + port.top + this.opts.offset;
+        bottom = this.target.bottom + port.bottom + this.opts.offset;
         if (top <= 0 && bottom >= 0) {
           return true;
         } else {

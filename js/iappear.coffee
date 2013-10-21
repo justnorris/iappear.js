@@ -22,7 +22,9 @@ jQuery ->
 
 		@$window = $(window)
 
-		@location = -1
+		@target = 
+			top: -1
+			bottom: -1
 		@position = -1
 
 		self = this
@@ -37,8 +39,10 @@ jQuery ->
 	
 		@update_location = ->
 			axis = @get_conv_axis()
-			loc = @$element.position()
-			@location = loc[axis]
+			target = @$element.position()
+			@target = 
+				top: target[axis]
+				bottom: target[axis] + @dimensions.element[@opts.axis]
 
 		@gather_dimensions = ->
 			@dimensions = 
@@ -60,17 +64,13 @@ jQuery ->
 
 		@is_visible = ->
 			viewport = @dimensions.window[@opts.axis]
-			element = @dimensions.element[@opts.axis]
 
-			box = 
-				top: @location
-				bottom: @location + element
 			port = 
 				top: @position - viewport
 				bottom: @position
 
-			top = box.top + port.top + @opts.offset
-			bottom = box.bottom + port.bottom + @opts.offset
+			top = @target.top + port.top + @opts.offset
+			bottom = @target.bottom + port.bottom + @opts.offset
 
 			if top <= 0 and bottom >= 0
 			then true
