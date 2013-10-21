@@ -32,27 +32,37 @@
       this.gather_dimensions = function() {
         return this.dimensions = {
           window: {
-            x: this.$window.width(),
-            y: this.$window.height()
+            x: self.$window.width(),
+            y: self.$window.height()
           },
           element: {
-            x: this.$element.outerWidth(),
-            y: this.$element.outerHeight()
+            x: self.$element.outerWidth(),
+            y: self.$element.outerHeight()
           }
         };
       };
       this.update_position = function() {
         var pos;
-        pos = iScroll.getComputedPosition()[this.opts.axis];
-        this.position = pos + this.opts.offset;
-        this.maybe_update_visibility();
+        pos = iScroll.getComputedPosition()[self.opts.axis];
+        self.position = pos + self.opts.offset;
+        self.maybe_update_visibility();
         return this.position;
       };
       this.is_visible = function() {
-        var el, win;
-        win = this.dimensions.window[this.opts.axis];
-        el = this.dimensions.element[this.opts.axis];
-        if (this.location >= this.position && (this.location + el) <= (this.position + win)) {
+        var bottom, box, port, top, viewport;
+        viewport = this.dimensions.window[this.opts.axis];
+        element = this.dimensions.element[this.opts.axis];
+        box = {
+          top: this.location,
+          bottom: this.location + element
+        };
+        port = {
+          top: this.position - viewport,
+          bottom: this.position
+        };
+        top = box.top + port.top + this.opts.offset;
+        bottom = box.bottom + port.bottom + this.opts.offset;
+        if (top <= 0 && bottom >= 0) {
           return true;
         } else {
           return false;
@@ -90,12 +100,12 @@
           if (this.opts.once === true) {
             this.appeared = true;
           }
-          return this.opts.on_appear();
+          return this.opts.on_appear.call(this.$element);
         } else {
           if (this.opts.once === true) {
             this.disappeared = true;
           }
-          return this.opts.on_disappear();
+          return this.opts.on_disappear.call(this.$element);
         }
       };
       this.init = function() {

@@ -66,6 +66,8 @@ module.exports = (grunt) ->
 				"jasmine"
 				"growl:jasmine"
 			]
+			options:
+				livereload: true
 
 		growl:
 			coffee:

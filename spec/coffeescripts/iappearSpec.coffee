@@ -124,7 +124,7 @@ describe 'iAppear', ->
 			@ia.update_position()
 			expect( @ia.is_visible() ).toBe false
 			
-			@iScroll.scrollTo(0, @ia.location )
+			@iScroll.scrollToElement( @$el.selector, 0 )
 			@ia.update_position()
 			expect( @ia.is_visible() ).toBe true
 
@@ -147,13 +147,13 @@ describe 'iAppear', ->
 
 
 		it "should trigger on_appear when an item appears", ->
-			@iScroll.scrollTo(0, @ia.location )
+			@iScroll.scrollToElement( @$el.selector, 0 )
 			@ia.update_position()
 
 			expect( @num ).toBe( 10 )
 
 		it "shouldn't trigger on_appear again if the element is still visible", ->
-			@iScroll.scrollTo(0, @ia.location )
+			@iScroll.scrollToElement( @$el.selector, 0 )
 			
 			@ia.update_position()
 			@ia.update_position()
@@ -168,7 +168,7 @@ describe 'iAppear', ->
 
 		it 'should trigger on_disappear if an element was visible', ->
 		  
-			@iScroll.scrollTo(0, @ia.location )
+			@iScroll.scrollToElement( @$el.selector, 0 )
 			@ia.update_position()
 
 			@iScroll.scrollTo(0, 10000 )
@@ -178,7 +178,7 @@ describe 'iAppear', ->
 
 		it 'should not trigger on_disappear twice in a row', ->
 
-			@iScroll.scrollTo(0, @ia.location )
+			@iScroll.scrollToElement( @$el.selector, 0 )
 			@ia.update_position()
 
 			expect( @num ).toBe( 10 )
@@ -196,7 +196,7 @@ describe 'iAppear', ->
 		it "should obey 'once' parameter (when true) ", ->
 			@ia.opts.once = true
 
-			@iScroll.scrollTo(0, @ia.location )
+			@iScroll.scrollToElement( @$el.selector, 0 )
 			@ia.update_position()
 
 			expect( @num ).toBe( 10 )
@@ -206,7 +206,7 @@ describe 'iAppear', ->
 
 			expect( @num ).toBe( -10 )
 			
-			@iScroll.scrollTo(0, @ia.location )
+			@iScroll.scrollToElement( @$el.selector, 0 )
 			@ia.update_position()
 
 			expect( @num ).toBe( -10 )
@@ -220,7 +220,7 @@ describe 'iAppear', ->
 		it "should obey 'once' parameter (when false) ", ->
 			@ia.opts.once = false
 
-			@iScroll.scrollTo(0, @ia.location )
+			@iScroll.scrollToElement( @$el.selector, 0 )
 			@ia.update_position()
 
 			expect( @num ).toBe( 10 )
@@ -230,7 +230,7 @@ describe 'iAppear', ->
 
 			expect( @num ).toBe( -10 )
 			
-			@iScroll.scrollTo(0, @ia.location )
+			@iScroll.scrollToElement( @$el.selector, 0 )
 			@ia.update_position()
 
 			expect( @num ).toBe( 0 )

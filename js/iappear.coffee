@@ -43,26 +43,36 @@ jQuery ->
 		@gather_dimensions = ->
 			@dimensions = 
 				window:
-					x: @$window.width()
-					y: @$window.height()
+					x: self.$window.width()
+					y: self.$window.height()
 				element: 
-					x: @$element.outerWidth()
-					y: @$element.outerHeight()
+					x: self.$element.outerWidth()
+					y: self.$element.outerHeight()
 
 		@update_position = ->
-			pos = iScroll.getComputedPosition()[@opts.axis]
+			pos = iScroll.getComputedPosition()[self.opts.axis]
 
-			@position = pos + @opts.offset
-			@maybe_update_visibility()
+			self.position = pos + self.opts.offset
+			self.maybe_update_visibility()
 
 			return @position
 
 
 		@is_visible = ->
-			win = @dimensions.window[@opts.axis]
-			el = @dimensions.element[@opts.axis]
-			if 	@location >= @position and 
-				( @location + el ) <= ( @position + win) 
+			viewport = @dimensions.window[@opts.axis]
+			element = @dimensions.element[@opts.axis]
+
+			box = 
+				top: @location
+				bottom: @location + element
+			port = 
+				top: @position - viewport
+				bottom: @position
+
+			top = box.top + port.top + @opts.offset
+			bottom = box.bottom + port.bottom + @opts.offset
+
+			if top <= 0 and bottom >= 0
 			then true
 			else false 
 
@@ -70,7 +80,6 @@ jQuery ->
 		on_scroll = ->
 			axis = self.opts.axis
 			pos = this[axis] >> 0
-
 			self.position = pos
 			self.maybe_update_visibility()
 			return pos
@@ -91,10 +100,10 @@ jQuery ->
 
 			if status is true
 				@appeared = true if @opts.once is true
-				@opts.on_appear() 
+				@opts.on_appear.call( @$element ) 
 			else
 				@disappeared = true if @opts.once is true
-				@opts.on_disappear()
+				@opts.on_disappear.call( @$element )
 
 
 

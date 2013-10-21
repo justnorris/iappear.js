@@ -111,7 +111,7 @@
         this.iScroll.scrollTo(0, amplified_pos.bottom);
         this.ia.update_position();
         expect(this.ia.is_visible()).toBe(false);
-        this.iScroll.scrollTo(0, this.ia.location);
+        this.iScroll.scrollToElement(this.$el.selector, 0);
         this.ia.update_position();
         return expect(this.ia.is_visible()).toBe(true);
       });
@@ -131,12 +131,12 @@
         });
       });
       it("should trigger on_appear when an item appears", function() {
-        this.iScroll.scrollTo(0, this.ia.location);
+        this.iScroll.scrollToElement(this.$el.selector, 0);
         this.ia.update_position();
         return expect(this.num).toBe(10);
       });
       it("shouldn't trigger on_appear again if the element is still visible", function() {
-        this.iScroll.scrollTo(0, this.ia.location);
+        this.iScroll.scrollToElement(this.$el.selector, 0);
         this.ia.update_position();
         this.ia.update_position();
         return expect(this.num).toBe(10);
@@ -147,14 +147,14 @@
         return expect(this.num).toBe(0);
       });
       it('should trigger on_disappear if an element was visible', function() {
-        this.iScroll.scrollTo(0, this.ia.location);
+        this.iScroll.scrollToElement(this.$el.selector, 0);
         this.ia.update_position();
         this.iScroll.scrollTo(0, 10000);
         this.ia.update_position();
         return expect(this.num).toBe(-10);
       });
       it('should not trigger on_disappear twice in a row', function() {
-        this.iScroll.scrollTo(0, this.ia.location);
+        this.iScroll.scrollToElement(this.$el.selector, 0);
         this.ia.update_position();
         expect(this.num).toBe(10);
         this.iScroll.scrollTo(0, 10000);
@@ -166,13 +166,13 @@
       });
       it("should obey 'once' parameter (when true) ", function() {
         this.ia.opts.once = true;
-        this.iScroll.scrollTo(0, this.ia.location);
+        this.iScroll.scrollToElement(this.$el.selector, 0);
         this.ia.update_position();
         expect(this.num).toBe(10);
         this.iScroll.scrollTo(0, 10000);
         this.ia.update_position();
         expect(this.num).toBe(-10);
-        this.iScroll.scrollTo(0, this.ia.location);
+        this.iScroll.scrollToElement(this.$el.selector, 0);
         this.ia.update_position();
         expect(this.num).toBe(-10);
         this.iScroll.scrollTo(0, 10000);
@@ -181,13 +181,13 @@
       });
       return it("should obey 'once' parameter (when false) ", function() {
         this.ia.opts.once = false;
-        this.iScroll.scrollTo(0, this.ia.location);
+        this.iScroll.scrollToElement(this.$el.selector, 0);
         this.ia.update_position();
         expect(this.num).toBe(10);
         this.iScroll.scrollTo(0, 10000);
         this.ia.update_position();
         expect(this.num).toBe(-10);
-        this.iScroll.scrollTo(0, this.ia.location);
+        this.iScroll.scrollToElement(this.$el.selector, 0);
         this.ia.update_position();
         expect(this.num).toBe(0);
         this.iScroll.scrollTo(0, 10000);
