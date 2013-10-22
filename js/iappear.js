@@ -26,7 +26,7 @@
           return "left";
         }
       };
-      this.update_location = function() {
+      this.update_target = function() {
         var axis, target;
         axis = this.get_conv_axis();
         target = this.$element.offset()[axis] - this.position;
@@ -112,7 +112,7 @@
       this.init = function() {
         this.opts = $.extend({}, this.defaults, options);
         this.gather_dimensions();
-        this.update_location();
+        this.update_target();
         this.update_position();
         iScroll.on("scroll", on_scroll);
         iScroll.on("scrollEnd", on_scroll);

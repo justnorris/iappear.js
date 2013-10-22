@@ -37,7 +37,7 @@ jQuery ->
 		@get_conv_axis = ->
 			if @opts.axis is "y" then "top" else "left"
 	
-		@update_location = ->
+		@update_target = ->
 			axis = @get_conv_axis()
 			target = @$element.offset()[axis] - @position
 
@@ -111,7 +111,7 @@ jQuery ->
 		@init = ->
 			@opts = $.extend( {}, @defaults, options )
 			@gather_dimensions()
-			@update_location()
+			@update_target()
 			@update_position()
 
 			iScroll.on "scroll", on_scroll
