@@ -114,17 +114,40 @@ body {
 
 #scroller li:nth-child(10) {
 
-        /*height: 300px;*/
-        /*line-height: 300px;*/
+        height: 300px;
+        line-height: 300px;
         background-color: #fff;
         -webkit-transition: background-color 1s ease-in-out;
            -moz-transition: background-color 1s ease-in-out;
-            -ms-transition: background-color 1s ease-in-out;
-             -o-transition: background-color 1s ease-in-out;
                 transition: background-color 1s ease-in-out;
         
 }
 
+#scroller li:nth-child(44) {
+
+        height: 1000px;
+        line-height: 1000px;
+        background-color: #fff;
+        -webkit-transition: all 1s ease-out;
+           -moz-transition: all 1s ease-out;
+                transition: all 1s ease-out;
+        
+}
+
+#scroller li {
+        -webkit-transition: all 300ms ease-out;
+           -moz-transition: all 300ms ease-out;
+                transition: all 300ms ease-out;
+        
+        -webkit-transform: translateY( 150px );
+           -moz-transform: translateY( 150px );
+                transform: translateY( 150px );
+}
+#scroller li.appeared {
+     -webkit-transform: translateY( 0px );
+       -moz-transform: translateY( 0px );
+            transform: translateY( 0px );   
+}
 </style>
 </head>
 <body>
@@ -183,6 +206,36 @@ body {
                         <li>Pretty row 48</li>
                         <li>Pretty row 49</li>
                         <li>Pretty row 50</li>
+                        <li>Lorem ipsum dolor sit amet.</li>
+                        <li>Amet nihil officiis eaque maxime.</li>
+                        <li>Obcaecati laborum ullam iste quam.</li>
+                        <li>Quidem, enim ratione excepturi minima.</li>
+                        <li>Deleniti suscipit illum optio nostrum.</li>
+                        <li>Ut, molestiae omnis odit unde.</li>
+                        <li>Beatae alias distinctio in fugiat.</li>
+                        <li>Neque vel sint totam enim.</li>
+                        <li>Aut, quaerat eaque repellat earum.</li>
+                        <li>Dolores quibusdam laborum enim eos.</li>
+                        <li>Nemo veniam sed error rem.</li>
+                        <li>Quae esse temporibus maxime iusto.</li>
+                        <li>Animi quidem numquam accusamus? Dolor?</li>
+                        <li>Deserunt nobis vel odit itaque!</li>
+                        <li>Ad, perspiciatis saepe voluptatem amet.</li>
+                        <li>Obcaecati porro nemo enim sed.</li>
+                        <li>Tenetur eligendi quos vero non?</li>
+                        <li>Tempore, qui quas ipsam maxime?</li>
+                        <li>Porro neque reprehenderit voluptatem repudiandae.</li>
+                        <li>Sit id provident animi blanditiis.</li>
+                        <li>Numquam rem harum ipsum odit.</li>
+                        <li>Facilis asperiores nemo hic temporibus.</li>
+                        <li>Perspiciatis consectetur exercitationem libero delectus.</li>
+                        <li>Nulla adipisci obcaecati unde nam.</li>
+                        <li>Omnis inventore tempora qui maxime?</li>
+                        <li>Tenetur earum totam illo ducimus.</li>
+                        <li>Inventore, eos deserunt vitae dignissimos!</li>
+                        <li>Perspiciatis soluta incidunt est perferendis.</li>
+                        <li>Necessitatibus, explicabo iusto magnam iure?</li>
+                        <li>Recusandae, ad natus asperiores totam!</li>
                 </ul>
         </div>
 </div>
@@ -196,13 +249,36 @@ $(document).on("ready", function(){
                 mouseWheel: true
       });
         $("li:nth-child(10)").iappear(iScroll, {
+                once: true,
+                on_appear: function() {
+                        $(this).css("background-color", "#B4D455");
+                        $(this).addClass("appeared");
+                }
+        });
+        
+        $("li:nth-child(44)").iappear(iScroll, {
                 once: false,
                 on_appear: function() {
-                        console.log("I'm Appearing Here! Woo!");
+                        console.log("The big guy is here....");
                         $(this).css("background-color", "#B4D455");
+                        $(this).addClass("appeared");
+                        
+
                 },
                 on_disappear: function() {
-                        $(this).css("background-color", "#F06D06")
+                        $(this).css("background-color", "#F06D06");
+                        $(this).removeClass("appeared");
+                        
+
+                }
+        });
+        $("li").iappear(iScroll, {
+                once: false,
+                on_appear: function() {
+                    $(this).addClass("appeared");
+                },
+                on_disappear: function() {
+                    $(this).removeClass("appeared");
                 }
         });
 });

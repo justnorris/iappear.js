@@ -39,10 +39,11 @@ jQuery ->
 	
 		@update_location = ->
 			axis = @get_conv_axis()
-			target = @$element.position()
+			target = @$element.offset()[axis] - @position
+
 			@target = 
-				top: target[axis]
-				bottom: target[axis] + @dimensions.element[@opts.axis]
+				top: target 
+				bottom: target + @dimensions.element[@opts.axis]
 
 		@gather_dimensions = ->
 			@dimensions = 

@@ -29,10 +29,10 @@
       this.update_location = function() {
         var axis, target;
         axis = this.get_conv_axis();
-        target = this.$element.position();
+        target = this.$element.offset()[axis] - this.position;
         return this.target = {
-          top: target[axis],
-          bottom: target[axis] + this.dimensions.element[this.opts.axis]
+          top: target,
+          bottom: target + this.dimensions.element[this.opts.axis]
         };
       };
       this.gather_dimensions = function() {
