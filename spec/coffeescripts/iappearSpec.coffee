@@ -74,13 +74,18 @@ describe 'iAppear', ->
 
 		it 'should know where the $element is', ->
 			expect( @ia.target ).toBeDefined()
+
 	
 		it 'should not be 0 px high or wide', ->
 			expect( @ia.target ).toBeDefined()
 			expect( @ia.target.top ).not.toBe( @ia.target.bottom )
 
+
+
 		it 'should have a position', ->
 			expect( @ia.position ).toBeDefined()
+
+
 
 		it 'should update position be able to update position', ->
 			before = @ia.position
@@ -90,6 +95,8 @@ describe 'iAppear', ->
 			@ia.update_position()	
 
 			expect( @ia.position ).not.toEqual(before)
+
+
 
 		it "should update position automatically with iScroll Probe", ->
 			@iScroll.scrollBy( 0, 10 )
@@ -106,14 +113,36 @@ describe 'iAppear', ->
 			expect( isNaN( @ia.position ) ).toBe( false )
 
 
+
 		it 'should accept and utilize offset', ->
 			real_position = @ia.position
 			expected_position = real_position + 100
 
 			@ia.opts.offset = 100
+			
+			@ia.update_offset()
 			@ia.update_position()
 			
 			expect( @ia.position ).toEqual( expected_position )
+
+		it 'should accept a function as offset', ->
+			real_position = @ia.position
+			expected_position = real_position + 100
+
+			@ia.opts.offset = -> 100
+			
+			@ia.update_offset()
+			@ia.update_position()
+			
+			expect( @ia.position ).toEqual( expected_position )
+
+		it 'should expose the $element the offset function', ->
+			Spy = false
+			@ia.opts.offset = -> Spy = this
+			@ia.refresh()
+
+			expect(Spy).toEqual(@ia.$element)
+
 
 		it "should know whether an element is visible", ->
 			amplified_pos =
@@ -131,6 +160,8 @@ describe 'iAppear', ->
 			@iScroll.scrollToElement( @$el.selector, 0 )
 			@ia.update_position()
 			expect( @ia.is_visible() ).toBe true
+
+
 
 
 

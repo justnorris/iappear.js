@@ -15,16 +15,20 @@
         bottom: -1
       };
       this.position = -1;
-      self = this;
+      this.offset = 0;
       this.status = false;
       this.appeared = false;
       this.disappeared = false;
+      self = this;
       this.get_conv_axis = function() {
         if (this.opts.axis === "y") {
           return "top";
         } else {
           return "left";
         }
+      };
+      this.update_offset = function() {
+        this.offset = typeof this.opts.offset === 'function' ? this.opts.offset.call(this.$element) : this.opts.offset;
       };
       this.update_target = function() {
         var axis, target;
@@ -38,20 +42,20 @@
       this.gather_dimensions = function() {
         return this.dimensions = {
           window: {
-            x: self.$window.width(),
-            y: self.$window.height()
+            x: this.$window.width(),
+            y: this.$window.height()
           },
           element: {
-            x: self.$element.outerWidth(),
-            y: self.$element.outerHeight()
+            x: this.$element.outerWidth(),
+            y: this.$element.outerHeight()
           }
         };
       };
       this.update_position = function() {
         var pos;
-        pos = iScroll.getComputedPosition()[self.opts.axis];
-        self.position = pos + self.opts.offset;
-        self.maybe_update_visibility();
+        pos = iScroll.getComputedPosition()[this.opts.axis];
+        this.position = pos + this.offset;
+        this.maybe_update_visibility();
         return this.position;
       };
       this.is_visible = function() {
@@ -61,8 +65,8 @@
           top: this.position - viewport,
           bottom: this.position
         };
-        top = this.target.top + port.top + this.opts.offset;
-        bottom = this.target.bottom + port.bottom + this.opts.offset;
+        top = this.target.top + port.top + this.offset;
+        bottom = this.target.bottom + port.bottom + this.offset;
         if (top <= 0 && bottom >= 0) {
           return true;
         } else {
@@ -109,15 +113,18 @@
           return this.opts.on_disappear.call(this.$element);
         }
       };
+      this.refresh = function() {
+        self.gather_dimensions();
+        self.update_offset();
+        self.update_target();
+        return self.update_position();
+      };
       this.init = function() {
         this.opts = $.extend({}, this.defaults, options);
-        this.gather_dimensions();
-        this.update_target();
-        this.update_position();
+        this.refresh();
         iScroll.on("scroll", on_scroll);
         iScroll.on("scrollEnd", on_scroll);
-        iScroll.on("refresh", this.gather_dimensions);
-        return iScroll.on("refresh", this.update_position);
+        return iScroll.on("refresh", this.refresh);
       };
       this.init();
       return this;
@@ -125,8 +132,8 @@
     $.iappear.prototype.defaults = {
       on_appear: function() {},
       on_disappear: function() {},
-      once: true,
       offset: 0,
+      once: true,
       axis: "y"
     };
     return $.fn.iappear = function(iScroll, options) {

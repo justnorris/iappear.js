@@ -12,7 +12,7 @@ jQuery ->
 		if typeof iScroll isnt "object" or iScroll.version == null
 			throw new Error "iScroll5 or greater is reqired for this plugin to work."
 			return this     
-
+		
 		# plugin settings
 		@opts = {}
 
@@ -27,16 +27,24 @@ jQuery ->
 			bottom: -1
 		@position = -1
 
-		self = this
+		@offset = 0
+
 
 		@status = false
 		@appeared = false
 		@disappeared = false
-
+		
+		self = @
 
 		@get_conv_axis = ->
 			if @opts.axis is "y" then "top" else "left"
 	
+		@update_offset = ->
+			@offset = if typeof @opts.offset is 'function'
+			then @opts.offset.call( @$element )
+			else @opts.offset
+			return
+
 		@update_target = ->
 			axis = @get_conv_axis()
 			target = @$element.offset()[axis] - @position
@@ -48,17 +56,18 @@ jQuery ->
 		@gather_dimensions = ->
 			@dimensions = 
 				window:
-					x: self.$window.width()
-					y: self.$window.height()
+					x: @$window.width()
+					y: @$window.height()
 				element: 
-					x: self.$element.outerWidth()
-					y: self.$element.outerHeight()
+					x: @$element.outerWidth()
+					y: @$element.outerHeight()
+
 
 		@update_position = ->
-			pos = iScroll.getComputedPosition()[self.opts.axis]
+			pos = iScroll.getComputedPosition()[@opts.axis]
 
-			self.position = pos + self.opts.offset
-			self.maybe_update_visibility()
+			@position = pos + @offset
+			@maybe_update_visibility()
 
 			return @position
 
@@ -70,8 +79,8 @@ jQuery ->
 				top: @position - viewport
 				bottom: @position
 
-			top = @target.top + port.top + @opts.offset
-			bottom = @target.bottom + port.bottom + @opts.offset
+			top = @target.top + port.top + @offset
+			bottom = @target.bottom + port.bottom + @offset
 
 			if top <= 0 and bottom >= 0
 			then true
@@ -106,20 +115,20 @@ jQuery ->
 				@disappeared = true if @opts.once is true
 				@opts.on_disappear.call( @$element )
 
-
+		@refresh = ->
+			self.gather_dimensions()
+			self.update_offset()
+			self.update_target()
+			self.update_position()
 
 		@init = ->
 			@opts = $.extend( {}, @defaults, options )
-			@gather_dimensions()
-			@update_target()
-			@update_position()
+
+			do @refresh
 
 			iScroll.on "scroll", on_scroll
 			iScroll.on "scrollEnd", on_scroll
-
-			iScroll.on "refresh", @gather_dimensions
-			iScroll.on "refresh", @update_position
-
+			iScroll.on "refresh", @refresh
 
 		# initialise the plugin
 		@init()
@@ -131,8 +140,8 @@ jQuery ->
 	$.iappear::defaults =
 		on_appear: ->
 		on_disappear: ->
-		once: true
 		offset: 0
+		once: true
 		axis: "y"
 
 

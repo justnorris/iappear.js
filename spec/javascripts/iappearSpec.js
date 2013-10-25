@@ -100,8 +100,29 @@
         real_position = this.ia.position;
         expected_position = real_position + 100;
         this.ia.opts.offset = 100;
+        this.ia.update_offset();
         this.ia.update_position();
         return expect(this.ia.position).toEqual(expected_position);
+      });
+      it('should accept a function as offset', function() {
+        var expected_position, real_position;
+        real_position = this.ia.position;
+        expected_position = real_position + 100;
+        this.ia.opts.offset = function() {
+          return 100;
+        };
+        this.ia.update_offset();
+        this.ia.update_position();
+        return expect(this.ia.position).toEqual(expected_position);
+      });
+      it('should expose the $element the offset function', function() {
+        var Spy;
+        Spy = false;
+        this.ia.opts.offset = function() {
+          return Spy = this;
+        };
+        this.ia.refresh();
+        return expect(Spy).toEqual(this.ia.$element);
       });
       return it("should know whether an element is visible", function() {
         var amplified_pos;
